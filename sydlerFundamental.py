@@ -135,7 +135,6 @@ O4 = makePoly(points, 'AFLK', tet_topology, name = 'O4', color = O_color)
 
 AFHI = makePoly(points, 'AFIH', tet_topology, color = Osplit_color)
 AHIJ = makePoly(points, 'AHIJ', tet_topology)
-DFHO = makePoly(points, 'DFHO', tet_topology)
 FHKO = makePoly(points, 'FHOK', tet_topology)
 
 ACDHI = makePoly(points, 'IHDCA', cone_topology, color = pseudo_color)
@@ -145,13 +144,22 @@ DEFHJ = makePoly(points, 'EFHJD', cone_topology, color = pseudo_color)
 DHJKM = makePoly(points, 'HJMKD', cone_topology, color = pseudo_color)
 FHIKL = makePoly(points, 'KLIHF', cone_topology, color = pseudo_color)
 
-DEFNO = makePoly(points, 'EFOND', cone_topology)
-
 ADHJNO = makePoly(points, 'AHJDON', prism_topology, color = Osplit_color)
 HJKMNO = makePoly(points, 'HOKJNM', prism_topology, color = Osplit_color)
 EFKMNO = makePoly(points, 'ENMFOK', prism_topology)
 
-slidable_decomp = 0.389610 # 0 9.99
+defhno_topology = [
+   (0,3,5),
+   (0,2,3),
+   (0,1,2),
+   (0,4,1),
+   (0,5,4),
+   (5,3,2,1,4)
+]
+
+DEFHNO = makePoly(points, 'DEFHNO', defhno_topology)
+
+slidable_decomp = 5.284710 # 0 9.99
 
 anim = slidable_decomp - int(slidable_decomp)
 
@@ -164,7 +172,7 @@ def lerp(a, b, anim = anim):
 slidable_stage1 = 0.830000 # 0 1
 slidable_stage2 = 0.948000 # 0 1
 slidable_stage3 = 0.433000 # 0 1
-slidable_stage5 = 0.1 # 0 1
+slidable_stage5 = 0.575000 # 0 1
 slidable_stage6 = 0.685000 # 0 1
 
 stage0_O1_pos, stage0_O3_pos = explode_offsets(
@@ -185,20 +193,18 @@ stage2 = [ O1.moved(stage0_O1_pos),
            HJKMNO.moved(stage1_HJKMNO_pos),
            DEFHJ.moved(stage1_HJKMNO_pos)]
 
-stage3_DHJKM_pos, stage3_DEFNO_pos, stage3_DFHO_pos = explode_offsets(
-    [ DHJKM, DEFNO, DFHO], slidable_stage3, stage1_HJKMNO_pos)
+stage3_DHJKM_pos, stage3_DEFHNO_pos = explode_offsets(
+    [ DHJKM, DEFHNO], slidable_stage3, stage1_HJKMNO_pos)
 
 stage3 = [ O1.moved(stage0_O1_pos),
            ADHJNO.moved(stage1_ADHJNO_pos),
            DHJKM.moved(lerp(stage1_HJKMNO_pos, stage3_DHJKM_pos)),
-           DEFNO.moved(lerp(stage1_HJKMNO_pos, stage3_DEFNO_pos)),
-           DFHO.moved(lerp(stage1_HJKMNO_pos, stage3_DFHO_pos)) ]
+           DEFHNO.moved(lerp(stage1_HJKMNO_pos, stage3_DEFHNO_pos))]
            
 
 stage4 = [ O1.moved(stage0_O1_pos),
            ADHJNO.moved(stage1_ADHJNO_pos),
-           DEFNO.moved(stage3_DEFNO_pos),
-           DFHO.moved(stage3_DFHO_pos) ]
+           DEFHNO.moved(stage3_DEFHNO_pos)]
 
 zero = numpy.array([0,0,0])
 
@@ -209,8 +215,7 @@ stage5 = [ O1.moved(lerp(stage0_O1_pos, zero)),
            ACDHI.moved(lerp(stage5_ACDHI_pos, zero)),
            CDFHI.moved(lerp(stage5_CDFHI_pos, zero)),
            ADHJNO.moved(lerp(stage1_ADHJNO_pos, zero)),
-           DEFNO.moved(lerp(stage3_DEFNO_pos, zero)),
-           DFHO.moved(lerp(stage3_DFHO_pos, zero)) ]
+           DEFHNO.moved(lerp(stage3_DEFHNO_pos, zero))]
 
 stage6_O2_pos, stage6_AEFJH_pos, stage6_AFHI_pos = explode_offsets(
     [ O2, AEFJH, AFHI], slidable_stage6)
