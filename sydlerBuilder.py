@@ -171,7 +171,7 @@ class GlWidget(QtOpenGL.QGLWidget):
                 glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse)
 
 
-                glBegin(GL_POLYGON)
+                glBegin(GL_TRIANGLE_FAN)
                 
                 glNormal3f(*normal)
                 for vertex in vertices:
